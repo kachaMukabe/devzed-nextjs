@@ -4,7 +4,7 @@ import Layout from '../components/layout'
 
 export default function Home() {
   return (
-    <>
+    <Layout>
 			<Flex
 				direction="column"
 				align="center"
@@ -74,6 +74,6 @@ export default function Home() {
 				</Flex>
 			</Flex>
 
-    </>
+    </Layout>
   )
 }

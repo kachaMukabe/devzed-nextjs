@@ -11,6 +11,8 @@ query getDeveloper($id: ID!){
 		name
 		developerId
 		email
+		githubusername
+		description
 		languages{
 			name
 		}
@@ -34,6 +36,8 @@ const DeveloperPage = () => {
 				<DeveloperCard 
 					name={developer.name} 
 					email={developer.email} 
+					description={developer.description}
+					githubusername={developer.githubusername}
 					languages={developer.languages} 
 				/>
 

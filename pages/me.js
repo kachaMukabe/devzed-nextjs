@@ -1,8 +1,10 @@
+import {useState, useEffect} from 'react'
 import {useQuery, gql} from '@apollo/client'
-import { Avatar, Button, Heading, Box, Text, HStack, Tag, Grid, GridItem} from '@chakra-ui/react'
+import { Avatar, Button, Heading, Box, Text,SkeletonText, SkeletonCircle, HStack, Tag, Grid, GridItem} from '@chakra-ui/react'
 import { useAuth } from '../lib/auth.js';
 import Layout from '../components/Layout';
 import LogIn from '../components/login';
+import CustomEditable from '../components/customeditable';
 import NextLink from 'next/Link';
 
 const CurrentUserQuery = gql`
@@ -16,9 +18,32 @@ const CurrentUserQuery = gql`
 `
 
 const Me = () => {
-	const {isSignedIn} = useAuth()
+	const {isSignedIn, signOut} = useAuth()
 	const {data} = useQuery(CurrentUserQuery)
-	console.log(data)
+	const [name, setName] = useState('')
+	const [email, setEmail] = useState('')
+	const [description, setDescription] = useState('')
+	const [githubuser, setGithubuser] = useState('')
+	
+	useEffect(()=>{
+		setName(data?.currentUser?.name)
+		setEmail(data?.currentUser?.email)
+	}, [data])
+
+	if(!data){
+		return (
+			<Layout>
+				<Box padding="6" boxShadow="lg" bg="white">
+					<SkeletonCircle size="10" />
+					<SkeletonText mt="4" noOfLines={4} spacing="4" />
+				</Box>
+			</Layout>
+		)
+	} 
+
+	const save = () => {
+		console.log({name, email, description, githubuser})
+	}
 		
 	return (
 		<Layout>
@@ -34,24 +59,30 @@ const Me = () => {
 					<GridItem rowSpan={3} colSpan={1}>
 						<Avatar size="lg" name="pic" src="/images/profile.png" />
 					</GridItem>
-					<GridItem colSpan={3} >
-						<Heading as="h4" size="md">
-							Name: {data?.currentUser?.name}
-						</Heading>
-						<Text>
-							Email: {data?.currentUser?.email}
-						</Text>
-					</GridItem>
-					<GridItem colSpan={1} >
-						<Button variant="outline">Edit</Button>
+					<GridItem colSpan={4} >
+						<HStack>
+							<Text>Name: </Text>
+							<CustomEditable text={data?.currentUser?.name} onEdit={setName}/>
+						</HStack>
+						<HStack>
+							<Text>Email: </Text>
+							{data?.currentUser && (<CustomEditable text={data?.currentUser?.email} onEdit={setEmail}/>)}
+						</HStack>
 					</GridItem>
 					<GridItem colSpan={4} >
-						<Text>
-							Description: Description here
-						</Text>
+						<HStack>
+							<Text>Github Username: </Text>
+							<CustomEditable text="Description her" onEdit={setGithubuser}/>
+						</HStack>
+						<HStack>
+							<Text>Description: </Text>
+							<CustomEditable text="Description her" onEdit={setDescription}/>
+						</HStack>
 					</GridItem>
 					<GridItem colSpan={4} >
 						<HStack spacing={4}>
+							<Button onClick={save}>Save</Button>
+							<Button onClick={signOut}>Log out</Button>
 
 						</HStack>
 					</GridItem>

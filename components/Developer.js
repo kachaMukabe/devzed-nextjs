@@ -1,7 +1,7 @@
 import {Avatar, Button, Heading, Box, Text, HStack, Tag, Grid, GridItem} from '@chakra-ui/react';
 
 
-const Developer = ({name, email, languages}) => {
+const Developer = ({name, email,description, githubusername, languages}) => {
 	
 	return (
 		<Box borderWidth="1px" rounded="md" p="5">
@@ -14,16 +14,22 @@ const Developer = ({name, email, languages}) => {
 					<Avatar size="lg" name="pic" src="/images/profile.png" />
 				</GridItem>
 				<GridItem colSpan={3} >
-					<Heading as="h4" size="md">
-						{name}
-					</Heading>
+					<HStack>
+						<Heading as="h4" size="md">
+							{name}
+						</Heading>
+						<Text>@{githubusername}</Text>
+					</HStack>
 				</GridItem>
 				<GridItem colSpan={1} >
 					<Button variant="outline">Contact </Button>
 				</GridItem>
 				<GridItem colSpan={4} >
 					<Text>
-						Description here
+						{email}
+					</Text>
+					<Text>
+						{description}
 					</Text>
 				</GridItem>
 				<GridItem colSpan={4} >
